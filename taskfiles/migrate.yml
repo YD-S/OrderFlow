@@ -1,0 +1,15 @@
+# taskfiles/migrate.yml
+version: '3'
+
+tasks:
+  default:
+    desc: Apply migrations for every service
+    cmds:
+      - for: [order, inventory, payment, notification]
+        task: apply
+        vars: { SERVICE: '{{.ITEM}}' }
+
+  apply:
+    desc: "Apply migrations for one service: go tool task migrate:apply -- order"
+    cmds:
+      - go tool tern migrate --migrations sql/{{.SERVICE}}/migrations --config sql/{{.SERVICE}}/tern.conf

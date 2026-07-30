@@ -1,0 +1,19 @@
+# taskfiles/gen.yml
+version: '3'
+
+tasks:
+  default:
+    desc: Run every code generation step
+    cmds:
+      - task: sqlc
+      - task: convgen
+
+  sqlc:
+    desc: Regenerate sqlc output for every service
+    cmds:
+      - go tool sqlc generate
+
+  convgen:
+    desc: Regenerate convgen mappers for every service
+    cmds:
+      - go tool convgen ./...

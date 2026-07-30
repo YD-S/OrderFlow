@@ -1,0 +1,9 @@
+go 1.26.5
+
+use (
+	.
+	./events
+	./platform/broker
+	./services/inventory
+	./services/order
+)

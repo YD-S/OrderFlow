@@ -1,0 +1,8 @@
+# Taskfile.yml
+version: '3'
+
+includes:
+  gen: ./taskfiles/gen.yml
+  migrate: ./taskfiles/migrate.yml
+  gate: ./taskfiles/gate.yml
+  docker: ./taskfiles/docker.yml
