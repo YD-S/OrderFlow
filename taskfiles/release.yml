@@ -6,6 +6,10 @@ vars:
   BASE: '{{.BASE | default "master"}}'
 
 tasks:
+  default:
+    desc: Run every step
+    cmds:
+      - task: init-next
   init-next:
     desc: "Bootstrap the first next-X.Y.Z branch (usage: task release:init-next VERSION=0.1.0)"
     vars:
