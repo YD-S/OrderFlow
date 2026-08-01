@@ -18,7 +18,7 @@ tasks:
     cmds:
       - git fetch origin {{.BASE}}
       - git checkout -B {{.BRANCH}} origin/{{.BASE}}
-      - git commit --allow-empty -m "chore: start {{.BRANCH}}"
+      - 'git commit --allow-empty -m "chore: start {{.BRANCH}}"'
       - git push -u origin {{.BRANCH}}
       - |
         if command -v gh >/dev/null 2>&1; then
