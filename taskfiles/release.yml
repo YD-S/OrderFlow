@@ -1,0 +1,30 @@
+# taskfiles/release.yml
+version: '3'
+
+vars:
+  VERSION: '{{.VERSION | default "0.1.0"}}'
+  BASE: '{{.BASE | default "master"}}'
+
+tasks:
+  init-next:
+    desc: "Bootstrap the first next-X.Y.Z branch (usage: task release:init-next VERSION=0.1.0)"
+    vars:
+      BRANCH: 'next-{{.VERSION}}'
+    preconditions:
+      - sh: git diff --quiet && git diff --cached --quiet
+        msg: "Working tree is dirty, commit or stash changes first"
+      - sh: '! git rev-parse --verify {{.BRANCH}} 2>/dev/null && ! git rev-parse --verify origin/{{.BRANCH}} 2>/dev/null'
+        msg: "Branch {{.BRANCH}} already exists locally or on origin"
+    cmds:
+      - git fetch origin {{.BASE}}
+      - git checkout -B {{.BRANCH}} origin/{{.BASE}}
+      - git commit --allow-empty -m "chore: start {{.BRANCH}}"
+      - git push -u origin {{.BRANCH}}
+      - |
+        if command -v gh >/dev/null 2>&1; then
+          gh pr create --draft --base {{.BASE}} --head {{.BRANCH}} \
+            --title "Prepare release {{.VERSION}}" \
+            --body "This PR tracks the upcoming release version **{{.VERSION}}**.\n\nAll development should target this branch."
+        else
+          echo "gh CLI not found, skipping PR creation. Open manually: {{.BRANCH}} -> {{.BASE}}"
+        fi
